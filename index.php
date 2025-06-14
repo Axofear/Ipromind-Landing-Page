@@ -22,7 +22,6 @@
             <nav class="hidden md:flex space-x-6">
                 <a href="#contact" class="text-gray-600 hover:text-blue-600">Contact</a>
                 <a href="#testimonials" class="text-gray-600 hover:text-blue-600">Testimonials</a>
-                <a href="#brands" class="text-gray-600 hover:text-blue-600">Our Partners</a>
                 <a href="#why-us" class="text-gray-600 hover:text-blue-600">Why Us</a>
             </nav>
         </div>
@@ -37,33 +36,80 @@
         </div>
     </section>
 
-    <!-- Contact Form -->
-    <section id="contact" class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
-            <div class="max-w-2xl mx-auto">
-                <form class="space-y-6">
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="fullName">Full Name</label>
-                        <input type="text" id="fullName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="email">Email</label>
-                        <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="phone">Contact Number</label>
-                        <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="business">Business Name</label>
-                        <input type="text" id="business" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300">Submit</button>
-                </form>
-            </div>
+    <!-- Contact Form Section -->
+<section id="contact" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
+        
+        <div class="max-w-2xl mx-auto">
+            <!-- Success Message (only shows after successful submission) -->
+            <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
+                    Thank you! Your message has been submitted successfully.
+                </div>
+            <?php endif; ?>
+            
+            <!-- Error Messages (if any) -->
+            <?php if (isset($_SESSION['form_errors'])): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+                    <?php foreach ($_SESSION['form_errors'] as $error): ?>
+                        <p><?php echo htmlspecialchars($error); ?></p>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Contact Form -->
+            <form action="process_form.php" method="POST" class="space-y-6">
+                <div>
+                    <label for="fullName" class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" 
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                           value="<?php echo isset($_SESSION['form_data']['fullName']) ? htmlspecialchars($_SESSION['form_data']['fullName']) : ''; ?>"
+                           required>
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" name="email" 
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                           value="<?php echo isset($_SESSION['form_data']['email']) ? htmlspecialchars($_SESSION['form_data']['email']) : ''; ?>"
+                           required>
+                </div>
+                
+                <div>
+                    <label for="phone" class="block text-gray-700 mb-2">Contact Number</label>
+                    <input type="tel" id="phone" name="phone" 
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                           value="<?php echo isset($_SESSION['form_data']['phone']) ? htmlspecialchars($_SESSION['form_data']['phone']) : ''; ?>"
+                           required>
+                </div>
+                
+                <div>
+                    <label for="business" class="block text-gray-700 mb-2">Business Name</label>
+                    <input type="text" id="business" name="business" 
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                           value="<?php echo isset($_SESSION['form_data']['business']) ? htmlspecialchars($_SESSION['form_data']['business']) : ''; ?>"
+                           required>
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300">
+                    Submit
+                </button>
+            </form>
         </div>
-    </section>
+    </div>
+</section>
+
+<?php
+// Clear the form data and errors after displaying them
+if (isset($_SESSION['form_errors'])) {
+    unset($_SESSION['form_errors']);
+}
+if (isset($_SESSION['form_data'])) {
+    unset($_SESSION['form_data']);
+}
+?>
 
     <!-- Testimonials -->
     <section id="testimonials" class="py-16 bg-gray-50">
@@ -123,7 +169,7 @@
         </div>
     </section>
 
-    <!-- Brands Section -->
+    <!-- Brands Section
     <section id="brands" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Top Brands Associated With Us</h2>
@@ -142,7 +188,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Why Us Section -->
     <section id="why-us" class="py-16 bg-gray-50">
