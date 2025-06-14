@@ -37,26 +37,54 @@
     </section>
 
     <!-- Contact Form -->
+    <!-- Contact Form -->
     <section id="contact" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
+            
+            <?php
+            // Display errors if they exist
+            if (!empty($errors)): ?>
+                <div class="max-w-2xl mx-auto mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                            <li><?php echo htmlspecialchars($error); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+            
+            <?php if ($success): ?>
+                <div class="max-w-2xl mx-auto mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    Thank you for contacting us! We'll get back to you soon.
+                </div>
+            <?php endif; ?>
+            
             <div class="max-w-2xl mx-auto">
-                <form class="space-y-6">
+                <form method="POST" action="process-form.php" class="space-y-6">
                     <div>
                         <label class="block text-gray-700 mb-2" for="fullName">Full Name</label>
-                        <input type="text" id="fullName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        <input type="text" id="fullName" name="fullName" 
+                               value="<?php echo isset($fullName) ? htmlspecialchars($fullName) : ''; ?>" 
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-2" for="email">Email</label>
-                        <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        <input type="email" id="email" name="email" 
+                               value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" 
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-2" for="phone">Contact Number</label>
-                        <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        <input type="tel" id="phone" name="phone" 
+                               value="<?php echo isset($phone) ? htmlspecialchars($phone) : ''; ?>" 
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-2" for="business">Business Name</label>
-                        <input type="text" id="business" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        <input type="text" id="business" name="business" 
+                               value="<?php echo isset($business) ? htmlspecialchars($business) : ''; ?>" 
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
                     </div>
                     <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300">Submit</button>
                 </form>
@@ -206,3 +234,23 @@
     <script src="script.js"></script>
 </body>
 </html> 
+
+<?php
+require_once 'config.php';
+session_start();
+
+// Get form data from session if exists
+if (isset($_SESSION['form_data'])) {
+    $fullName = $_SESSION['form_data']['fullName'];
+    $email = $_SESSION['form_data']['email'];
+    $phone = $_SESSION['form_data']['phone'];
+    $business = $_SESSION['form_data']['business'];
+    $errors = $_SESSION['form_data']['errors'];
+    $success = $_SESSION['form_data']['success'];
+    
+    // Clear session data
+    unset($_SESSION['form_data']);
+}
+
+require_once 'includes/header.php';
+?>
